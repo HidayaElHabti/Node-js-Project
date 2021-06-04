@@ -8,6 +8,8 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+const PORT = process.env.PORT || 3000;
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,3 +20,5 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 module.exports = app;
+
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
