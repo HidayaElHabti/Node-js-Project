@@ -65,7 +65,9 @@ router.put('/', async function(req, res, next) {
 //DELETE methods
 router.delete('/:id', async function(req, res, next) {
   const id = req.params.id;
-  res.send(await usersRepo.deleteUser(id));
+  res.send(await usersRepo.deleteUser(id).then(id =>{
+    console.log(id)
+  }));
 });
 
 module.exports = router;
