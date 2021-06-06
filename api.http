@@ -1,2 +1,2 @@
 
-DELETE   http://localhost:3000/users/22 http/1.1
+put    http://localhost:3000/articles/1?tag=1 http/1.1

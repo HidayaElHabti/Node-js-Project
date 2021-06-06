@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const usersRepo = require('../repositories/users');
+const articlesRepo = require('../repositories/articles');
 
 // GET methods
 
@@ -34,6 +35,11 @@ router.get('/:id', async function(req, res, next) {
   res.send(await usersRepo.getUser(id));
 });
 
+router.get('/:id/articles', async function(req, res, next) {
+  const id = req.params.id;
+  res.send(await articlesRepo.getAllUserArticles(id));
+});
+
 // POST methods
 router.post('/', async function(req, res, next) {
   const user = {
@@ -45,7 +51,18 @@ router.post('/', async function(req, res, next) {
   res.send(await usersRepo.addUser(user));
 });
 
+router.post('/:id/articles', async function(req, res, next) {
+  const article = {
+    title: req.body.title,
+    content: req.body.content,
+    published: req.body.published,
+    UserId: req.params.id
+  };
+  res.send(await articlesRepo.addArticle(article));
+});
+
 // PUT methods
+
 router.put('/', async function(req, res, next) {
   const id = req.body.id;
   const username = req.body.username;
@@ -63,10 +80,11 @@ router.put('/', async function(req, res, next) {
 });
 
 //DELETE methods
+
 router.delete('/:id', async function(req, res, next) {
   const id = req.params.id;
-  res.send(await usersRepo.deleteUser(id).then(id =>{
-    console.log(id)
+  res.send(await usersRepo.deleteUser(id).then(message =>{
+    console.log(message)
   }));
 });
 
