@@ -1,2 +1,3 @@
 
-put    http://localhost:3000/articles/1?tag=1 http/1.1
+GET   http://localhost:3000/articles/1 http/1.1
+

@@ -3,10 +3,11 @@ var router = express.Router();
 
 const usersRepo = require('../repositories/users');
 const articlesRepo = require('../repositories/articles');
+const auth = require('../repositories/auth');
 
 // GET methods
 
-router.get('/', async function(req, res, next) {
+router.get('/',auth.verifyToken, async function(req, res, next) {
   const offset = Number(req.query.offset);
   const limit = Number(req.query.limit);
   const email = req.query.email;
@@ -18,19 +19,19 @@ router.get('/', async function(req, res, next) {
   res.send(await usersRepo.getAllUsers());
 });
 
-router.get('/admins', async function(req, res, next) {
+router.get('/admins',auth.verifyToken, async function(req, res, next) {
   res.send(await usersRepo.getAdmins());
 });
 
-router.get('/authors', async function(req, res, next) {
+router.get('/authors',auth.verifyToken, async function(req, res, next) {
   res.send(await usersRepo.getAuthors());
 });
 
-router.get('/guests', async function(req, res, next) {
+router.get('/guests',auth.verifyToken, async function(req, res, next) {
   res.send(await usersRepo.getGuests());
 });
 
-router.get('/:id', async function(req, res, next) {
+router.get('/:id',auth.verifyToken,async function(req, res, next) {
   const id = req.params.id;
   res.send(await usersRepo.getUser(id));
 });
@@ -41,7 +42,7 @@ router.get('/:id/articles', async function(req, res, next) {
 });
 
 // POST methods
-router.post('/', async function(req, res, next) {
+router.post('/',auth.verifyToken, async function(req, res, next) {
   const user = {
     username: req.body.username,
     email: req.body.email,
@@ -51,7 +52,7 @@ router.post('/', async function(req, res, next) {
   res.send(await usersRepo.addUser(user));
 });
 
-router.post('/:id/articles', async function(req, res, next) {
+router.post('/:id/articles',auth.verifyToken, async function(req, res, next) {
   const article = {
     title: req.body.title,
     content: req.body.content,
@@ -63,7 +64,7 @@ router.post('/:id/articles', async function(req, res, next) {
 
 // PUT methods
 
-router.put('/', async function(req, res, next) {
+router.put('/',auth.verifyToken, async function(req, res, next) {
   const id = req.body.id;
   const username = req.body.username;
   if(username)
@@ -81,7 +82,7 @@ router.put('/', async function(req, res, next) {
 
 //DELETE methods
 
-router.delete('/:id', async function(req, res, next) {
+router.delete('/:id',auth.verifyToken, async function(req, res, next) {
   const id = req.params.id;
   res.send(await usersRepo.deleteUser(id).then(message =>{
     console.log(message)

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const tagsRepo = require('../repositories/tags');
+const auth = require('../repositories/auth');
 
 // GET methods
 
@@ -26,7 +27,7 @@ router.get('/:id/articles', async function(req, res, next) {
 
 //PUT methods
 
-router.put('/', async function(req, res, next) {
+router.put('/',auth.verifyToken, async function(req, res, next) {
     const id = req.body.id;
     const name = req.body.name;
     if(name)
@@ -35,7 +36,7 @@ router.put('/', async function(req, res, next) {
 
 //POST methods
 
-router.post('/', async function(req, res, next) {
+router.post('/',auth.verifyToken, async function(req, res, next) {
     const tag = {
       name: req.body.name,
     };
@@ -44,7 +45,7 @@ router.post('/', async function(req, res, next) {
 
 //DELETE methods
 
-router.delete('/:id', async function(req, res, next) {
+router.delete('/:id',auth.verifyToken, async function(req, res, next) {
     const id = req.params.id;
     res.send(await tagsRepo.deleteTag(id).then(message =>{
       console.log(message)

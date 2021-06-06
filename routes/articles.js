@@ -3,6 +3,7 @@ var router = express.Router();
 
 const articlesRepo = require('../repositories/articles');
 const commentsRepo = require('../repositories/comments');
+const auth = require('../repositories/auth');
 
 // GET methods
 
@@ -32,7 +33,7 @@ router.get('/:id/tags', async function(req, res, next) {
 
 // PUT methods
 
-router.put('/', async function(req, res, next) {
+router.put('/',auth.verifyToken, async function(req, res, next) {
     const id = req.body.id;
     const title = req.body.title;
     if(title)
@@ -45,7 +46,7 @@ router.put('/', async function(req, res, next) {
       res.send(await articlesRepo.updateArticlePublished(id,published));
 });
 
-router.put('/:id', async function(req, res, next) {
+router.put('/:id',auth.verifyToken, async function(req, res, next) {
   const articleid = req.params.id;
   const tagid = req.query.tag;
   if(tagid)
@@ -60,7 +61,7 @@ router.put('/:id', async function(req, res, next) {
 
 //POST methods
 
-router.post('/:id', async function(req, res, next) {
+router.post('/:id',auth.verifyToken, async function(req, res, next) {
   const comment = {
     content: req.body.content,
     ArticleId: req.params.id
@@ -70,7 +71,7 @@ router.post('/:id', async function(req, res, next) {
 
 //DELETE methods
 
-router.delete('/:id', async function(req, res, next) {
+router.delete('/:id',auth.verifyToken, async function(req, res, next) {
     const id = req.params.id;
     const commentid = req.query.comment;
     if(commentid)

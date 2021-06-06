@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const commentsRepo = require('../repositories/comments');
+const auth = require('../repositories/auth');
 
 //GET methods
 
@@ -16,7 +17,7 @@ router.get('/:id', async function(req, res, next) {
 
 //PUT methods
 
-router.put('/', async function(req, res, next) {
+router.put('/',auth.verifyToken, async function(req, res, next) {
     const id = req.body.id;
     const content = req.body.content;
     if(content)
@@ -25,7 +26,7 @@ router.put('/', async function(req, res, next) {
 
 //DELETE methods
 
-router.delete('/:id', async function(req, res, next) {
+router.delete('/:id',auth.verifyToken, async function(req, res, next) {
     const id = req.params.id;
     res.send(await commentsRepo.deleteComment(id).then(message =>{
       console.log(message)
